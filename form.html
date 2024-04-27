@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Form</title>
+  <style>
+    /* Styles for labels */
+    label {
+      display: block; /* Place each label on a new line */
+      margin-bottom: 5px; /* Add some space below each label */
+    }
+
+    /* Styles for input fields */
+    input {
+      width: 20%; /* Make inputs fill the container width */
+      padding: 8px; /* Add some padding */
+      margin-bottom: 10px; /* Add some space below each input */
+      box-sizing: border-box; /* Include padding and border in input's total width */
+    }
+
+    /* Error and success message styles */
+    .error {
+      color: red;
+      margin-bottom: 5px; /* Add some space below each error message */
+    }
+
+    .success {
+      color: green;
+      margin-bottom: 5px; /* Add some space below each success message */
+    }
+
+    /* Button styles */
+
+    button {
+      margin-top: 10px; /* Add some space above the button */
+      padding: 10px 20px;
+      background-color: white;
+      color: black;
+      border: 1px solid black; /* Add a solid black border */
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: black;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <form id="signupForm">
+    <!-- Email field -->
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="Example@email.com" required>
+    <span id="emailError" class="error"></span>
+
+    <!-- Password field -->
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Your Password" required>
+    <span id="passwordError" class="error"></span>
+
+    <!-- Success message -->
+    <span id="successMessage" class="success" style="display: none;">All good to go</span>
+
+    <!-- Submit button -->
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const successMessage = document.getElementById('successMessage');
+
+    emailInput.addEventListener('input', () => {
+      validateEmail();
+    });
+
+    passwordInput.addEventListener('input', () => {
+      validatePassword();
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent form submission
+
+      // Check if email and password are valid
+      if (validateEmail() && validatePassword()) {
+        if (confirm("Are you sure you want to sign up?")) {
+          alert("Successful signup!");
+          form.reset(); // Clear form inputs
+          successMessage.style.display = 'none'; // Hide success message
+          emailError.textContent = ''; // Clear error messages
+          passwordError.textContent = '';
+        }
+      }
+    });
+
+    function validateEmail() {
+      const emailValue = emailInput.value.trim();
+      if (emailValue.length < 3 || !emailValue.includes('@') || !emailValue.includes('.')) {
+        emailError.textContent = 'Email must be at least 3 characters long and contain "@" and "."';
+        successMessage.style.display = 'none'; // Hide success message
+        return false;
+      } else {
+        emailError.textContent = ''; // Clear error message
+        showSuccessMessage();
+        return true;
+      }
+    }
+
+    function validatePassword() {
+      const passwordValue = passwordInput.value.trim();
+      if (passwordValue.length < 8) {
+        passwordError.textContent = 'Password must be at least 8 characters long';
+        successMessage.style.display = 'none'; // Hide success message
+        return false;
+      } else {
+        passwordError.textContent = ''; // Clear error message
+        showSuccessMessage();
+        return true;
+      }
+    }
+
+    function showSuccessMessage() {
+      if (emailError.textContent === '' && passwordError.textContent === '') {
+        successMessage.style.display = 'block'; // Show success message
+      }
+    }
+  </script>
+</body>
+</html>
